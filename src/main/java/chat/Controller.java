@@ -137,12 +137,13 @@ public class Controller {
         // en una lista de instancias de objetos Message. Consulte la clase chat.model.Message para ver como crear
         // instancias de la misma
 
-        Statement stmt = conn.createStatement();
-        String query = "select * from messages";
-        ResultSet rs = stmt.executeQuery(query);
+        PreparedStatement stmt = conn.prepareStatement("select * from messages where chatRoom = ?");
+        stmt.setLong(1 ,chatRoomId);
+        ResultSet rs = stmt.executeQuery();
         List<Message> Messages = new ArrayList<Message>();
 
         while (rs.next()){
+            System.out.println(rs.getString(2));
             Message message = new Message(rs.getString(2), rs.getString(4));
             Messages.add(message);
         }
@@ -164,11 +165,9 @@ public class Controller {
         // en una lista de instancias de objetos ChatRoom. Consulte la clase chat.model.ChatRoom para ver como crear
         // instancias de la misma
         
-        Statement stmt = conn.createStatement();
-        String query = "select * from chatrooms";
-        ResultSet rs = stmt.executeQuery(query);
+        PreparedStatement stmt = conn.prepareStatement("select * from chatrooms");
+        ResultSet rs = stmt.executeQuery();
         List<ChatRoom> chatrooms = new ArrayList<ChatRoom>();
-
         while (rs.next()){
             ChatRoom chatroom = new ChatRoom(rs.getLong(1), rs.getString(2));
             chatrooms.add(chatroom);
